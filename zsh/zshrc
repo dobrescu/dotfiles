@@ -1,0 +1,81 @@
+##############################################################################################################
+## Inspired from https://github.com/g4rcez/dotfiles/blob/master/zsh/zshrc
+##############################################################################################################
+## exports
+export UID=$(id -u)
+export GID=$(id -g)
+export DOTFILES="$HOME/dotfiles"
+source $HOME/dotfiles/zsh/exports.sh
+source $HOME/dotfiles/zsh/utils.sh
+
+local -a PATH_EXPORTS=(
+  "/usr/local/bin"
+  "$HOME/.local/bin"
+)
+
+PATH_RESULT="$PATH"
+for path in $PATH_EXPORTS; do
+  if [[ -d "$path" ]]; then PATH_RESULT="$PATH_RESULT:$path" fi
+done
+export PATH="$PATH_RESULT"
+
+##############################################################################################################
+## zsh-snap + plugins
+[[ -r "$SNAP_DIR/znap.zsh" ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git $SNAP_DIR
+source "$SNAP_DIR/znap.zsh"
+zstyle ':znap:*' repos-dir $PLUGINS_DIR
+zstyle ':znap:*:*' git-maintenance off
+
+export ZSH_NVM_NO_LOAD=true #Don't load nvm so that the ohmyzsh script get properly loaded
+
+local -a PLUGINS=(
+    "MichaelAquilina/zsh-you-should-use"
+    "wfxr/forgit"
+    "hlissner/zsh-autopair"
+    "lukechilds/zsh-nvm"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-completions"
+    "zsh-users/zsh-history-substring-search"
+    "zsh-users/zsh-syntax-highlighting"
+)
+for plugin in $PLUGINS; do
+  if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+    znap source $plugin || echo "failed -> $plugin"
+  else
+    znap clone $plugin
+  fi
+done
+zstyle ':omz:update' mode auto
+zstyle ':omz:update' frequency 1
+zstyle ':omz:plugins:nvm' lazy no
+zstyle ':omz:plugins:nvm' autoload yes
+
+znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,termsupport}
+znap source ohmyzsh/ohmyzsh plugins/{git,fzf,brew,aws,tmux,nvm}
+
+znap eval starship "starship init zsh --print-full-init"
+znap prompt
+##############################################################################################################
+## fpath hooks
+znap fpath _deno     "deno completions zsh"
+znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
+znap fpath _npm      "npm completion"
+##############################################################################################################
+## source files
+local -a SOURCE=(
+  "$DOTFILES/zsh/history.sh"
+  "$HOME/.fzf.zsh"
+  "$HOME/.fzf/fzf-git.sh"
+  "$HOME/.fzf/shell/key-bindings.zsh"
+  "$DOTFILES/zsh/fzf/settings.sh"
+  "$DOTFILES/bat/settings.sh"
+  "$DOTFILES/zsh/eza/settings.sh"
+  "$DOTFILES/zsh/zoxide/settings.sh"
+  "$DOTFILES/zsh/node.sh"
+  "$DOTFILES/zsh/aliases.sh"
+)
+for config in $SOURCE; do
+  if [[ -f "$config" ]]; then source "$config"; fi
+done

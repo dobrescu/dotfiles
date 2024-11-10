@@ -1,0 +1,28 @@
+#!/bin/bash
+COMMAND="pnpm"
+SUBCOMMAND="$1"
+shift
+INSTALL_COMMAND="add"
+PRE=""
+ARGUMENTS="-E"
+
+if [[ -f "package-lock.json" ]]; then
+  COMMAND="npm"
+  SCRIPT_KEY="$(jq -r '.scripts | keys[]' package.json | grep -Ew "^${SUBCOMMAND}\$")";
+  if [[ "${SCRIPT_KEY}" != "" ]]; then PRE="run"; fi
+  INSTALL_COMMAND="install"
+fi
+if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
+if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; fi
+if [[ "$#" == "0" ]]; then
+  ARGUMENTS=""
+fi
+
+case $SUBCOMMAND in
+  "add") NODE_ENV=development "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@ ;;
+  "i") NODE_ENV=development "$COMMAND" install $ARGUMENTS $@ ;;
+  "install") NODE_ENV=development "$COMMAND" install $ARGUMENTS $@ ;;
+  "outdated") "$COMMAND" outdated ;;
+  "audit") "$COMMAND" audit ;;
+  *) $COMMAND $PRE $SUBCOMMAND "$@" ;;
+esac

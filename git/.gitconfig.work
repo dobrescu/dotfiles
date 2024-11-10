@@ -1,0 +1,13 @@
+[github]
+    user = dandobrescu@studyportals.com
+
+[user]
+    email = dandobrescu@studyportals.com
+    name = Dan Dobrescu
+    signingkey = 38CA2F7EAB2BE93E
+
+[commit]
+    gpgsign = true
+
+[core]
+    sshCommand = ssh -i ~/.ssh/id_rsa

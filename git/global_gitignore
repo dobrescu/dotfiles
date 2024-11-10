@@ -1,0 +1,13 @@
+*.o
+.DS_Store
+._*
+.env
+.idea
+.vscode
+/build
+/dist
+/node_modules
+\#*#
+env
+node_modules
+npm-debug.log
