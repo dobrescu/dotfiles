@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { GITUtility } from "jsr:@utility/git";
 
 const repo = new GITUtility(Deno.cwd());
