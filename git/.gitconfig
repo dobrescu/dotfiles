@@ -14,12 +14,16 @@
     excludesFile = ~/dotfiles/git/global_gitignore
     ignoreCase = false
     sshCommand = ssh -i ~/.ssh/id_rsa_dobrescu
-    
+
 [includeIf "gitdir:~/workspace/studyportals/"]
 	path = ~/.gitconfig.work
 
+[rerere]
+    enabled = true
+
 [apply]
     whitespace = fix
+
 [grep]
     lineNumber = true
 
@@ -82,6 +86,8 @@
 [diff]
     colorMoved = default
     tool = delta
+    mnemonicPrefix = true
+    renames = copies
 
 [gpg "ssh"]
     allowedSignersFile = ~/.ssh/allowed_signers
@@ -89,6 +95,13 @@
 [push]
     autoSetupRemote = true
     autoSetupRemove = true
+    default = simple
+
+[credential]
+    helper = cache --timeout=3600
+
+[gc]
+    auto = 256
 
 [alias]
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
