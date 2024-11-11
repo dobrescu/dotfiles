@@ -1,0 +1,5 @@
+{
+	"imports": {
+		"prettier": "npm:prettier@^3.3.3"
+	}
+}

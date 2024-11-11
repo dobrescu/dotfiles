@@ -1,0 +1,22 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@utility/git@*": "0.4.1",
+    "npm:prettier@^3.3.3": "3.3.3"
+  },
+  "jsr": {
+    "@utility/git@0.4.1": {
+      "integrity": "2b30af32a85096b85bcffa3b9d8ee96812231bddb8a2f2f29750b4f1ac1cb04b"
+    }
+  },
+  "npm": {
+    "prettier@3.3.3": {
+      "integrity": "sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:prettier@^3.3.3"
+    ]
+  }
+}
