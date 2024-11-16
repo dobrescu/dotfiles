@@ -1,28 +1,75 @@
 #!/bin/bash
+
+# Enable safe Bash options
+set -euo pipefail
+
+# Global Variables
 COMMAND="pnpm"
-SUBCOMMAND="$1"
-shift
+SUBCOMMAND="${1:-}"
 INSTALL_COMMAND="add"
 PRE=""
 ARGUMENTS="-E"
 
-if [[ -f "package-lock.json" ]]; then
-  COMMAND="npm"
-  SCRIPT_KEY="$(jq -r '.scripts | keys[]' package.json | grep -Ew "^${SUBCOMMAND}\$")";
-  if [[ "${SCRIPT_KEY}" != "" ]]; then PRE="run"; fi
-  INSTALL_COMMAND="install"
+# Functions
+log_info() {
+  echo "[INFO] $1"
+}
+
+log_error() {
+  echo "[ERROR] $1" >&2
+  exit 1
+}
+
+detect_package_manager() {
+  if [[ -f "package-lock.json" ]]; then
+    COMMAND="npm"
+    SCRIPT_KEY=$(jq -r '.scripts | keys[]' package.json | grep -Ew "^${SUBCOMMAND}\$" || true)
+    if [[ -n "${SCRIPT_KEY}" ]]; then
+      PRE="run"
+    fi
+    INSTALL_COMMAND="install"
+  elif [[ -f "yarn.lock" ]]; then
+    COMMAND="yarn"
+  elif [[ -f "pnpm-lock.yaml" ]]; then
+    COMMAND="pnpm"
+  else
+    log_error "No lock file found. Cannot determine package manager."
+  fi
+}
+
+execute_command() {
+  case "${SUBCOMMAND}" in
+    "add")
+      NODE_ENV=development "${COMMAND}" "${INSTALL_COMMAND}" ${ARGUMENTS} "$@"
+      ;;
+    "i" | "install")
+      NODE_ENV=development "${COMMAND}" install ${ARGUMENTS} "$@"
+      ;;
+    "outdated")
+      "${COMMAND}" outdated
+      ;;
+    "audit")
+      "${COMMAND}" audit
+      ;;
+    *)
+      "${COMMAND}" "${PRE}" "${SUBCOMMAND}" "$@"
+      ;;
+  esac
+}
+
+# Main Script Logic
+if [[ -z "${SUBCOMMAND}" ]]; then
+  log_error "No subcommand provided. Usage: ./script.sh <subcommand> [args...]"
 fi
-if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
-if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; fi
-if [[ "$#" == "0" ]]; then
+
+shift # Remove the subcommand from positional parameters
+if [[ "$#" -eq 0 ]]; then
   ARGUMENTS=""
 fi
 
-case $SUBCOMMAND in
-  "add") NODE_ENV=development "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@ ;;
-  "i") NODE_ENV=development "$COMMAND" install $ARGUMENTS $@ ;;
-  "install") NODE_ENV=development "$COMMAND" install $ARGUMENTS $@ ;;
-  "outdated") "$COMMAND" outdated ;;
-  "audit") "$COMMAND" audit ;;
-  *) $COMMAND $PRE $SUBCOMMAND "$@" ;;
-esac
+log_info "Detecting package manager..."
+detect_package_manager
+log_info "Using package manager: ${COMMAND}"
+
+log_info "Executing command: ${SUBCOMMAND}"
+execute_command "$@"
