@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# commit-msg hook: Enforce Conventional Commits on normal commits.
+#
+# This script enforces that the first non‑comment line of your commit message
+# follows the pattern:
+#
+#    <type>(<optional scope>): <description>
+#
+# Allowed types: build, ci, docs, feat, fix, perf, refactor, style, test
+#
+# Merge and revert commits (which start with "Merge" or "Revert") are exempted.
+#
+# You can bypass this hook entirely by setting the environment variable
+# SKIP_COMMIT_MSG_HOOK.
+
+# Bypass hook if requested.
+if [ -n "$SKIP_COMMIT_MSG_HOOK" ]; then
+  exit 0
+fi
+
+# Read the commit message from the file passed as the first argument.
+# Remove comment lines (starting with '#') and blank lines.
+commit_msg=$(sed '/^#/d' "$1" | sed '/^[[:space:]]*$/d")
+first_line=$(echo "$commit_msg" | head -n 1)
+
+# Automatically skip validation for merge or revert commits.
+case "$first_line" in
+  Merge\ * | Revert\ * )
+    exit 0
+    ;;
+esac
+
+# Define the regex for Conventional Commits.
+# This regex supports an optional scope in parentheses and an optional '!' for breaking changes.
+regex='^(build|ci|docs|feat|fix|perf|refactor|style|test)(\([^)]+\))?(!)?: .+'
+
+# Validate the first line of the commit message.
+if ! echo "$first_line" | grep -E "$regex" > /dev/null; then
+  echo "ERROR: Your commit message does not follow the Conventional Commits format."
+  echo "Please use: <type>(<optional scope>): <description>"
+  echo "Allowed types: build, ci, docs, feat, fix, perf, refactor, style, test"
+  exit 1
+fi
+
+exit 0

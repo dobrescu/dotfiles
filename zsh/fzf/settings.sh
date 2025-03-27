@@ -12,11 +12,9 @@ export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
 
-export FZF_CTRL_T_OPTS="
-  --walker-skip .git,node_modules
-  --preview '([[ -d {} ]] && eza --tree --color=always {} | head -200 || bat -n --color=always --line-range :500 {})'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'
-"
+export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules \
+  --preview '([[ -d {} ]] && eza --tree --color=always {} | head -200 || bat -n --color=always --line-range :500 {})' \
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
 
 export FZF_ALT_C_OPTS="

@@ -4,9 +4,12 @@
 [user]
     email = dandobrescu@studyportals.com
     name = Dan Dobrescu
-    signingkey = 38CA2F7EAB2BE93E
+    signingkey = 59CF82EE9CBD5E40
 
 [commit]
+    gpgsign = true
+
+[tag]
     gpgsign = true
 
 [core]

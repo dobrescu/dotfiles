@@ -1,0 +1,39 @@
+{
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.fontFamily": "'FiraCode Nerd Font', monospace",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.lineHeight": 1.1,
+    "editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
+    "editor.fontSize": 14,
+    "editor.lineHeight": 22,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.languageContext.typescript.enabled": true,
+    "github.copilot.chat.newWorkspaceCreation.enabled": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.chat.completionContext.typescript.mode": "on",
+    "github.copilot.advanced.debug.useNodeFetcher": true,
+    "github.copilot.advanced.debug.useNodeFetcherForChat": true,
+    "github.copilot.advanced.debug.useNodeFetcherForChatCompletions": true,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+
+    "files.insertFinalNewline": true,
+
+    "editor.wordWrap": "on",
+    "editor.tabSize": 2,
+    "editor.cursorStyle": "line",
+    "editor.cursorWidth": 2,
+    "editor.cursorBlinking": "solid",
+    "window.zoomLevel": 0.35,
+    "terminal.integrated.gpuAcceleration": "on",
+
+    "typescript.autoClosingTags": true,
+    "typescript.preferences.preferTypeOnlyAutoImports": true,
+    "typescript.preferGoToSourceDefinition": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "prettier.requireConfig": true,
+
+}

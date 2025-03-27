@@ -1,0 +1,32 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema-preview",
+      "profiles": 
+    {
+        "defaults": 
+        {
+            "colorScheme": "Solarized Dark",
+            "font": 
+            {
+                "face": "FiraCode Nerd Font",
+                "features": 
+                {
+                    "cv02": 1,
+                    "cv14": 1,
+                    "cv25": 1,
+                    "cv26": 1,
+                    "cv28": 1,
+                    "cv32": 1,
+                    "ss02": 1,
+                    "ss03": 1,
+                    "ss05": 1,
+                    "ss07": 1,
+                    "ss09": 1
+                },
+                "size": 12,
+                "weight": "normal"
+            }
+        }
+    },
+    "startOnUserLogin": true
+}
