@@ -78,7 +78,7 @@ function setupBat() {
   mkdir -p "$BAT_THEME_DIR"
 
   # Download tokyo-night theme
-  curl -Lo /tmp/tokyonight.tmTheme https://raw.githubusercontent.com/folke/tokyonight.nvim/master/extras/sublime/tokyonight.tmTheme
+  curl -Lo /tmp/tokyonight.tmTheme https://raw.githubusercontent.com/folke/tokyonight.nvim/refs/heads/main/extras/sublime/tokyonight_night.tmTheme
   cp /tmp/tokyonight.tmTheme "$BAT_THEME_DIR/"
   rm /tmp/tokyonight.tmTheme
 
