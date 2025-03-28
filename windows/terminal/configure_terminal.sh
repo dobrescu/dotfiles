@@ -50,19 +50,19 @@ if [ ! -f "$settings_path" ]; then
 fi
 
 # Define the jq filter for recursive deep merging with safe handling of non-object values.
-jq_filter='
+jq_filter="
   def keys_or_empty:
-    if type == "object" then keys_unsorted else [] end;
+    if type == \"object\" then keys_unsorted else [] end;
   def rmerge(a; b):
-    if (a | type) == "object" and (b | type) == "object" then
-      a as $a | b as $b |
-      reduce (($a | keys_or_empty) + ($b | keys_or_empty) | unique)[] as $k
-        ( {}; .[$k] = (if ($a[$k] != null and $b[$k] != null) then rmerge($a[$k]; $b[$k]) else ($b[$k] // $a[$k]) end) )
+    if (a | type) == \"object\" and (b | type) == \"object\" then
+      a as \$a | b as \$b |
+      reduce ((\$a | keys_or_empty) + (\$b | keys_or_empty) | unique)[] as \$k
+        ( {}; .[\$k] = (if (\$a[\$k] != null and \$b[\$k] != null) then rmerge(\$a[\$k]; \$b[\$k]) else (\$b[\$k] // \$a[\$k]) end) )
     else
       b // a
     end;
-  .[0] as $orig | .[1] as $merge | rmerge($orig; $merge)
-'
+  .[0] as \$orig | .[1] as \$merge | rmerge(\$orig; \$merge)
+"
 
 # Merge the original settings and the merge JSON.
 if jq -s "$jq_filter" "$settings_path" "$merge_file" > "${settings_path}.tmp"; then

@@ -1,15 +1,16 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema-preview",
-      "profiles": 
+    "defaultProfile": "AUTOMATIC_REPLACED_BY_SCRIPT",
+      "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "colorScheme": "Solarized Dark",
-            "font": 
+            "font":
             {
                 "face": "FiraCode Nerd Font",
-                "features": 
+                "features":
                 {
                     "cv02": 1,
                     "cv14": 1,
@@ -28,5 +29,6 @@
             }
         }
     },
+    "schemes": [],
     "startOnUserLogin": true
 }

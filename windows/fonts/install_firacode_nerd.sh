@@ -3,18 +3,17 @@
 #
 # This script downloads the latest Fira Code Nerd Font zip file from the official
 # Nerd Fonts GitHub release (dynamically determined), extracts the TrueType font files,
-# copies them to the current user's Windows fonts directory, and registers the fonts
-# in the Windows registry under HKCU.
+# and installs the fonts using the common function defined in install_fonts_common.sh.
 #
 # Prerequisites:
 #   - WSL Ubuntu with curl, unzip, sed, jq, and basic Unix tools installed.
+#   - fontconfig (for fc-scan) installed.
 #   - PowerShell available via powershell.exe.
 #
 # Usage: ./install_fira_code_nerd_font.sh
 #
 # Note: This installs fonts per-user. For system-wide installation (in C:\Windows\Fonts),
 #       administrative privileges are required.
-
 set -euo pipefail
 
 # Retrieve latest release info from the Nerd Fonts GitHub API.
@@ -46,51 +45,13 @@ curl -L -o "$ZIP_FILE" "$FONT_URL"
 echo "Extracting font files..."
 unzip -q "$ZIP_FILE" -d "$TMP_DIR/firacode"
 
-# Retrieve the Windows LOCALAPPDATA path via PowerShell.
-LOCALAPPDATA=$(powershell.exe -NoProfile -Command "[Environment]::GetFolderPath('LocalApplicationData')" | tr -d '\r\n')
-if [ -z "$LOCALAPPDATA" ]; then
-  echo "Error: Unable to retrieve LOCALAPPDATA path from PowerShell."
-  exit 1
-fi
+# Source the common functions file.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=./install_fonts_common.sh
+source "$SCRIPT_DIR/install_fonts_common.sh"
 
-# Construct the Windows fonts directory path for the current user.
-WIN_FONTS_DIR="${LOCALAPPDATA}\\Microsoft\\Windows\\Fonts"
-echo "Windows user fonts directory: $WIN_FONTS_DIR"
-
-# Convert the Windows fonts directory to a Linux-accessible path.
-WIN_FONTS_DIR_LINUX=$(echo "$WIN_FONTS_DIR" | sed -E 's/^([A-Z]):/\/mnt\/\L\1/' | sed 's/\\/\//g')
-echo "Linux path to Windows fonts directory: $WIN_FONTS_DIR_LINUX"
-
-# Create the fonts directory if it doesn't exist.
-if [ ! -d "$WIN_FONTS_DIR_LINUX" ]; then
-  echo "Creating Windows fonts directory at $WIN_FONTS_DIR_LINUX..."
-  mkdir -p "$WIN_FONTS_DIR_LINUX"
-fi
-
-# Find all TrueType font files in the extracted directory.
-FONT_FILES=$(find "$TMP_DIR/firacode" -type f -iname "*.ttf")
-if [ -z "$FONT_FILES" ]; then
-  echo "Error: No TrueType font files found in the extracted archive."
-  exit 1
-fi
-
-# Copy each .ttf file to the Windows fonts directory.
-for font in $FONT_FILES; do
-  basefont=$(basename "$font")
-  echo "Copying $basefont to $WIN_FONTS_DIR_LINUX..."
-  cp "$font" "$WIN_FONTS_DIR_LINUX/"
-done
-
-# Register the fonts in the Windows registry under HKCU.
-# Each font is registered under "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts".
-for font in $FONT_FILES; do
-  basefont=$(basename "$font")
-  # Construct the registry entry name. Conventionally, it's "<Font Name> (TrueType)".
-  fontName="${basefont%.*} (TrueType)"
-  reg_cmd="New-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -Name '$fontName' -Value '$basefont' -PropertyType String -Force"
-  echo "Registering font $fontName..."
-  powershell.exe -NoProfile -Command "$reg_cmd" >/dev/null
-done
+# Install the fonts using the common function.
+install_fonts_from_dir "$TMP_DIR/firacode"
 
 echo "Fira Code Nerd Font installation completed."
 

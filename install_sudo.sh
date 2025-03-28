@@ -19,7 +19,8 @@ sudo apt-get install -y bat
 sudo apt-get install -y eza
 sudo apt-get install -y git-delta
 sudo apt-get install -y xdg-utils
-sudo apt-get install -y build-essential 
+sudo apt-get install -y build-essential
+sudo apt-get install -y unzip
 
 # Install development tools
 sudo apt-get install -y git jq curl wget
@@ -32,4 +33,3 @@ sudo apt-get install -y neovim
 # Install zsh
 sudo apt-get install -y zsh
 sudo chsh -s "$(which zsh)"
-

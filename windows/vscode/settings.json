@@ -9,6 +9,7 @@
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "shellcheck.customArgs": ["-x"],
     "github.copilot.chat.codesearch.enabled": true,
     "github.copilot.chat.languageContext.typescript.enabled": true,
     "github.copilot.chat.newWorkspaceCreation.enabled": true,
@@ -34,6 +35,5 @@
     "typescript.preferences.preferTypeOnlyAutoImports": true,
     "typescript.preferGoToSourceDefinition": true,
     "typescript.updateImportsOnFileMove.enabled": "always",
-    "prettier.requireConfig": true,
-
+    "prettier.requireConfig": true
 }
