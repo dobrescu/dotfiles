@@ -14,7 +14,7 @@
     excludesFile = ~/dotfiles/git/global_gitignore
     ignoreCase = false
     sshCommand = ssh -i ~/.ssh/id_rsa_dobrescu
-    hookPath = ~/dotfiles/git/hooks
+    hooksPath = ~/dotfiles/git/hooks
 
 [includeIf "gitdir:~/workspace/studyportals/"]
 	path = ~/.gitconfig.work

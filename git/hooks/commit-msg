@@ -21,7 +21,7 @@ fi
 
 # Read the commit message from the file passed as the first argument.
 # Remove comment lines (starting with '#') and blank lines.
-commit_msg=$(sed '/^#/d' "$1" | sed '/^[[:space:]]*$/d")
+commit_msg=$(sed '/^#/d' "$1" | sed '/^[[:space:]]*$/d')
 first_line=$(echo "$commit_msg" | head -n 1)
 
 # Automatically skip validation for merge or revert commits.
